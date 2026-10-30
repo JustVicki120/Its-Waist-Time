@@ -1,0 +1,69 @@
+ACCOUNT OWNERSHIP AND DELETION — PROPOSAL FOR VICKI
+Not built, activated or promised to customers. Requires approval before implementation.
+
+THE SIMPLE EXPERIENCE
+A person opens Account & Privacy in Waist Time, chooses View my information,
+Correct an entry, Get a copy, or Delete my account. Editing uses existing entry
+controls. Export/account deletion need new supported tools. Vicki never writes SQL
+or reviews private health entries to establish who owns an account.
+
+VERIFY OWNERSHIP
+1. For sensitive requests, ask the signed-in person to confirm with a fresh code
+   sent to the email already attached to their account. They enter it inside the
+   trusted app; they never forward it to Vicki or put it into a support email.
+2. The server verifies the code with Supabase and checks the returned stable user
+   ID equals the account being acted on. Do not trust a typed email, screenshot,
+   email sender, client-side user ID or an old refreshed session as proof of a new
+   deletion request. Do not let an arbitrary replacement email become the target.
+3. A new server-side verification service must issue a short-lived, single-use
+   authorization tied to that user, the specific request and its intended action.
+   Rate-limit code/request attempts, prevent reuse and cross-account substitution,
+   and keep tokens/codes out of logs. A general sign-in OTP does not by itself
+   prove consent to deletion; require a separate clear final confirmation.
+4. If mailbox access is lost, pause destructive work. A separately approved account
+   recovery process is needed; Support must not bypass verification using health
+   facts, an email address or screenshots. This flow is not available today.
+
+WHAT VICKI DOES
+Receive a request through the confirmed support mailbox. Acknowledge it and point
+people to their own in-app controls. In the proposed private Support Desk, see only
+request ID, verified/not-verified state, action requested, dates and outcome—not
+health entries or photographs. Provide export only through the verified user's
+protected download, never to an unverified email destination. Correction is normally
+done by the person in their app. Never ask for their code or claim completion before
+an automated job and its checks actually succeed. The desk/export process must be
+built; until then requests can be logged privately but not promised fulfillment.
+
+SAFE ACCOUNT DELETION TO BUILD
+Explain exactly what will be removed and let the person preserve wanted information
+first. Address unsynced entries and device-local photos explicitly. A separate
+confirmation follows fresh ownership verification; signing out/uninstalling is not
+this confirmation. Avoid unnecessary obstacles or support-only completion.
+
+A trusted backend job first blocks new writes and replays for that account, then
+removes its health records and associated conflicts/receipts/change content, handles
+approved residual/legal records, revokes sessions and removes the Auth account in
+a safe dependency order. Use retry-safe stages and an audited outcome; never put
+privileged credentials in the app. Auth deletion alone and individual-entry purge
+are not complete solutions. Existing access tokens and stale devices must be denied
+by server-side account state even before token expiry. Test partial failures.
+
+On the initiating device, clear only this account's local records/queued changes
+and saved credential after the confirmed process. The exact local photo handling
+needs Vicki's decision and a clear user warning; originals in Photos/Files must not
+be removed. Other connected devices need scoped cleanup when they learn the result.
+Disconnected or lost devices cannot be remotely guaranteed erased. The app must not
+allow old pending writes to recreate the deleted account or records after reconnect.
+
+Backups are separate: establish actual retention and a process that reapplies
+completed deletion decisions if restoring a backup. Keep only minimal approved
+verification/audit records for an explicitly justified period, not private entry
+content. Do not promise immediate removal from every historic backup or OS backup.
+
+CONFIRMATION
+Show a private completion receipt and send a minimal confirmation to the verified
+account contact only after successful checks. No health details. Say what was
+removed, any justified retained information and known offline-device/backup limits.
+If a stage fails, show pending/needs attention rather than “deleted.” Vicki can see
+that status without reading the user's records. Response times and retention periods
+must be set before public promises. This proposal does not authorize any deletion.

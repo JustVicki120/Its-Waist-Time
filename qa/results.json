@@ -1,0 +1,189 @@
+{
+  "cases": 18,
+  "results": [
+    {
+      "file": "index.html",
+      "height": 568,
+      "width": 320,
+      "documentWidth": 320,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 568,
+      "width": 320,
+      "documentWidth": 320,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 568,
+      "width": 320,
+      "documentWidth": 320,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "index.html",
+      "height": 844,
+      "width": 390,
+      "documentWidth": 390,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 844,
+      "width": 390,
+      "documentWidth": 390,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 844,
+      "width": 390,
+      "documentWidth": 390,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "index.html",
+      "height": 1133,
+      "width": 744,
+      "documentWidth": 744,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 1133,
+      "width": 744,
+      "documentWidth": 744,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 1133,
+      "width": 744,
+      "documentWidth": 744,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "index.html",
+      "height": 744,
+      "width": 1133,
+      "documentWidth": 1133,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 744,
+      "width": 1133,
+      "documentWidth": 1133,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 744,
+      "width": 1133,
+      "documentWidth": 1133,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "index.html",
+      "height": 900,
+      "width": 1280,
+      "documentWidth": 1280,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 900,
+      "width": 1280,
+      "documentWidth": 1280,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 900,
+      "width": 1280,
+      "documentWidth": 1280,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "index.html",
+      "height": 900,
+      "width": 1440,
+      "documentWidth": 1440,
+      "title": "Your journey, one day at a time · Waist Time",
+      "h1": "Every point tellspart of the story.",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "privacy.html",
+      "height": 900,
+      "width": 1440,
+      "documentWidth": 1440,
+      "title": "Privacy Policy · Waist Time",
+      "h1": "Privacy Policy",
+      "brokenImages": [],
+      "smallLinks": []
+    },
+    {
+      "file": "support.html",
+      "height": 900,
+      "width": 1440,
+      "documentWidth": 1440,
+      "title": "Support · Waist Time",
+      "h1": "Support",
+      "brokenImages": [],
+      "smallLinks": []
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "linksAndFaq": "passed",
+  "draftPublicationGuard": "passed"
+}

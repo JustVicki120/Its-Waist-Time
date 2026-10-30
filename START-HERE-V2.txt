@@ -1,0 +1,9 @@
+WAIST TIME WEBSITE — SECOND OCTOBER30 REVIEW
+Unzip and open index.html. Read Privacy and Support.
+Preview: home-preview.png.
+Review: REVIEW-V2.txt, OWNER-PROCEDURE-V2.txt and PLAIN-ENGLISH-PAGES-V2.txt.
+This is a new local review version. The earlier online preview has NOT been updated.
+No app code, cloud data, official domain or TestFlight changes.
+
+Support address is now inserted: Support@ItsWaistTime.com.
+No mailbox delivery test performed. Hosted preview has not received this contact update.
