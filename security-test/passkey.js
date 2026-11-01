@@ -8132,6 +8132,7 @@ var ma = "https://hyvjyxguyjnbrektodzc.supabase.co", ha = (e) => typeof e == "st
 	}
 	async run(e, t) {
 		if (this.busy || this.abort.signal.aborted || {
+			existing: "ready",
 			email: "ready",
 			code: "email",
 			totp: "totp",
@@ -8140,9 +8141,15 @@ var ma = "https://hyvjyxguyjnbrektodzc.supabase.co", ha = (e) => typeof e == "st
 		}[e] !== this.phase) return this.status();
 		this.busy = !0, this.stage = e, this.phase = "working";
 		try {
-			if (this.check(), e === "email") {
+			if (this.check(), e === "existing") {
+				if (this.existing = !0, !await this.checkEmail(t)) throw Error();
+				this.check(), this.email = t;
+				let e = X(await this.client.auth.signInWithPasskey({ options: { signal: this.abort.signal } }));
+				if (await this.identityFrom(e.session), this.check(), !this.identity.amr.some((e) => e.method === "passkey")) throw Error();
+				this.events.push("Existing passkey sign-in verified for the entered sandbox account. No credential changes requested."), this.phase = "complete", this.message = "Existing passkey sign-in succeeded. No email, authenticator code, or new passkey was requested. This does not authorize health-data access.", this.stage = "stopped", this.abort.abort(), this.client = void 0, this.identity = void 0, this.email = void 0;
+			} else if (e === "email") {
 				if (!await this.checkEmail(t)) throw Error("Use the approved sandbox account.");
-				if (this.email = t, (await this.client.auth.signInWithOtp({
+				if (this.check(), this.email = t, (await this.client.auth.signInWithOtp({
 					email: t,
 					options: { shouldCreateUser: !1 }
 				})).error) throw Error();
@@ -8186,7 +8193,7 @@ var ma = "https://hyvjyxguyjnbrektodzc.supabase.co", ha = (e) => typeof e == "st
 				this.check(), this.events.push("New passkey sign-in verified for the same sandbox account. Existing factors and passkeys preserved."), this.phase = "complete", this.message = "Passkey creation and sign-in succeeded. This does not authorize health-data access or prove required user verification.", this.stage = "stopped", this.abort.abort(), this.client = void 0, this.identity = void 0, this.email = void 0;
 			}
 		} catch {
-			this.stop("Step failed, canceled, or outcome uncertain. No retry. If a passkey prompt appeared, preserve it for review; do not delete or recreate it.");
+			this.stop(this.existing ? "Existing-passkey sign-in failed or canceled. No retry or credential changes were requested." : "Step failed, canceled, or outcome uncertain. No retry. If a passkey prompt appeared, preserve it for review; do not delete or recreate it.");
 		} finally {
 			this.busy = !1;
 		}
@@ -8198,11 +8205,12 @@ function ya(e, t) {
 		e.check();
 		let i = new URL(typeof n == "string" ? n : n.url ?? n.href), a = (r.method ?? "GET").toUpperCase(), o = i.pathname.replace(/^\/auth\/v1/, "");
 		if (i.origin !== ma || !i.pathname.startsWith("/auth/v1/") || i.search || i.hash || i.username || i.password) throw Error("Outside sandbox scope.");
-		let s = a === "GET" && [
+		let s = a === "GET" && (e.stage === "existing" ? ["/user", "/.well-known/jwks.json"] : [
 			"/user",
 			"/.well-known/jwks.json",
 			"/passkeys"
-		].includes(o), c = {
+		]).includes(o), c = {
+			existing: ["/passkeys/authentication/options", "/passkeys/authentication/verify"],
 			email: ["/otp"],
 			code: ["/verify"],
 			totp: [`/factors/${e.factor}/challenge`, `/factors/${e.factor}/verify`],
@@ -8215,7 +8223,7 @@ function ya(e, t) {
 		e.calls.set(a + o, l + 1);
 		let u = r.body ? JSON.parse(r.body) : void 0;
 		if (o === "/otp" && (u.email !== e.email || u.create_user !== !1) || o === "/verify" && (u.email !== e.email || u.type !== "email")) throw Error();
-		if (o === "/passkeys/registration/verify" && (e.credentialId = u.credential?.id), o === "/passkeys/authentication/verify" && (!e.credentialId || u.credential?.id !== e.credentialId)) throw Error("Select the newly created passkey.");
+		if (o === "/passkeys/registration/verify" && (e.credentialId = u.credential?.id), o === "/passkeys/authentication/verify" && !e.existing && (!e.credentialId || u.credential?.id !== e.credentialId)) throw Error("Select the newly created passkey.");
 		let d = await t(n, {
 			...r,
 			redirect: "error",
@@ -8263,6 +8271,8 @@ Q("ready").onsubmit = (e) => {
 	e.preventDefault(), Ca("code", Q("email-code").value.trim());
 }, Q("totp").onsubmit = (e) => {
 	e.preventDefault(), Ca("totp", Q("totp-code").value.trim());
+}, Q("existing").onclick = () => {
+	Q("address").reportValidity() && Ca("existing", Q("address").value.trim().toLowerCase());
 }, Q("create").onclick = () => Ca("register"), Q("signin-button").onclick = () => Ca("signin"), Q("stop").onclick = () => {
 	Sa($.stop()), Q("email-code").value = "", Q("totp-code").value = "", Q("address").value = "";
 }, window.addEventListener("pagehide", () => $?.stop()), xa ? ($ = new va((e) => fa(ma, ba, {
