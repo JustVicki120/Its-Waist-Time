@@ -8263,7 +8263,18 @@ var ba = Object.freeze({
 	accountDigests: ["16eb086c854bc079e9ee8169697389b7d5be09f6960b72334845409676b4b2d3", "aeb0a946a60fd4baba756f656642541acd6ff8b2a7637e49901559d8f74c2de9"],
 	expiresAt: 1793986695245,
 	resumeFactorDigests: ["be75fd4d9176708110a6714285a1be722287209a203bcc3128ee37a19c525229"]
-}), xa = "sb_publishable_RKuf517e3CSdi7z2EBRgzw_c0iqHymC", $ = (e) => document.getElementById(e), Sa = {
+}), xa = "sb_publishable_RKuf517e3CSdi7z2EBRgzw_c0iqHymC";
+//#endregion
+//#region beta-enrollment/qr.mjs
+function Sa(e) {
+	if (typeof e != "string") throw Error("Authenticator QR unavailable");
+	if (/^data:image\/svg\+xml;(?:utf-8|charset=utf-8),/i.test(e)) return e;
+	if (/^\s*<svg\b/i.test(e)) return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(e);
+	throw Error("Authenticator QR unavailable");
+}
+//#endregion
+//#region beta-enrollment/app.mjs
+var $ = (e) => document.getElementById(e), Ca = {
 	closed: "Test account setup is not enabled yet.",
 	password: "Sign in with the approved test account password.",
 	enroll: "Create one authenticator entry for this test account.",
@@ -8273,7 +8284,7 @@ var ba = Object.freeze({
 	working: "Checking…",
 	complete: "Test account setup verified. Protected data access is still off. Tell your operator this step is complete.",
 	"review-required": "Stopped. Your operator needs to check the result before another attempt. Keep any authenticator entry or passkey already created."
-}, Ca = new va((e) => fa(ma, xa, {
+}, wa = new va((e) => fa(ma, xa, {
 	auth: {
 		experimental: { passkey: !0 },
 		persistSession: !1,
@@ -8283,11 +8294,11 @@ var ba = Object.freeze({
 	},
 	global: { fetch: ya(e, window.fetch.bind(window)) }
 }), location.origin === "https://itswaisttime.com" && window.isSecureContext && window.top === window && typeof PublicKeyCredential < "u" ? ba : void 0, (e) => {
-	$("qr").removeAttribute("src"), $("qr").hidden = !0, e && ($("qr").src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(e.qrCode), $("qr").hidden = !1);
+	$("qr").removeAttribute("src"), $("qr").hidden = !0, e && ($("qr").src = Sa(e.qrCode), $("qr").hidden = !1);
 });
-function wa() {
-	let e = Ca.status();
-	$("status").textContent = e.resuming && e.phase === "verify" ? "Use the authenticator entry you already saved for this test account. Enter its current six-digit code. No new entry is being created." : Sa[e.phase];
+function Ta() {
+	let e = wa.status();
+	$("status").textContent = e.resuming && e.phase === "verify" ? "Use the authenticator entry you already saved for this test account. Enter its current six-digit code. No new entry is being created." : Ca[e.phase];
 	for (let t of [
 		"password",
 		"enroll",
@@ -8302,24 +8313,24 @@ function wa() {
 		"review-required"
 	].includes(e.phase);
 }
-async function Ta(e, t) {
-	let n = Ca.run(e, t);
-	$("password-value").value = "", $("code").value = "", wa(), await n, wa();
+async function Ea(e, t) {
+	let n = wa.run(e, t);
+	$("password-value").value = "", $("code").value = "", Ta(), await n, Ta();
 }
 $("password").onsubmit = (e) => {
-	e.preventDefault(), Ta("password", {
+	e.preventDefault(), Ea("password", {
 		email: $("email").value.trim().toLowerCase(),
 		password: $("password-value").value
 	});
 }, $("enroll").onsubmit = (e) => {
-	e.preventDefault(), Ta("enroll");
+	e.preventDefault(), Ea("enroll");
 }, $("verify").onsubmit = (e) => {
-	e.preventDefault(), Ta("verify", $("code").value.trim());
+	e.preventDefault(), Ea("verify", $("code").value.trim());
 }, $("register").onsubmit = (e) => {
-	e.preventDefault(), Ta("register");
+	e.preventDefault(), Ea("register");
 }, $("signin").onsubmit = (e) => {
-	e.preventDefault(), Ta("signin");
+	e.preventDefault(), Ea("signin");
 }, $("stop").onclick = () => {
-	Ca.stop(), $("password-value").value = "", $("code").value = "", wa();
-}, window.addEventListener("pagehide", () => Ca.stop()), wa();
+	wa.stop(), $("password-value").value = "", $("code").value = "", Ta();
+}, window.addEventListener("pagehide", () => wa.stop()), Ta();
 //#endregion
