@@ -6,8 +6,9 @@
 <h1>Test account setup</h1><p>Use only the fictional account approved for this beta.</p>
 <p id="status" role="status">Test account setup is not enabled yet.</p>
 <form id="password" hidden><label>Test email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password-value" type="password" autocomplete="current-password" required></label><button>Sign in</button></form>
+<form id="recover" hidden><button>Remove unfinished entry</button></form>
 <form id="enroll" hidden><button>Create authenticator entry</button></form>
 <form id="verify" hidden><img id="qr" alt="Authenticator enrollment QR code" hidden><label>Authenticator code<input id="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" required></label><button>Verify code</button></form>
 <form id="register" hidden><button>Create passkey</button></form>
 <form id="signin" hidden><button>Verify new passkey</button></form>
-<button id="stop" disabled>Stop setup</button><script type="module" src="./beta-enrollment.js?v=qr-fix-1"></script></html>
+<button id="stop" disabled>Stop setup</button><script type="module" src="./beta-enrollment.js?v=recovery-1"></script></html>
