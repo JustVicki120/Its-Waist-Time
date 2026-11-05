@@ -8095,16 +8095,18 @@ var ma = "https://xqczjqonivguoeltskon.supabase.co", X = (e) => typeof e == "str
 		created: e.created_at
 	})).sort((e, t) => e.id.localeCompare(t.id));
 }, va = class {
-	constructor(e, { enabled: t = !1, accounts: n = [], accountDigests: r = [], expiresAt: i = 0 } = {}, a = () => {}, o = Date.now) {
-		if (this.now = o, this.displayTotp = a, this.phase = "closed", this.stage = "closed", this.busy = !1, this.abort = new AbortController(), this.calls = /* @__PURE__ */ new Map(), !t) return;
-		let s = n.length + r.length;
-		if (!Number.isSafeInteger(i) || i <= o() || i > o() + 864e5 || s < 1 || s > 2 || n.some((e) => !X(e.id) || !/^\S+@\S+\.\S+$/.test(e.email)) || r.some((e) => !/^\w{64}$/.test(e) || !/^[0-9a-f]+$/.test(e)) || new Set(r).size !== r.length || new Set(n.map((e) => e.id)).size !== n.length || new Set(n.map((e) => e.email)).size !== n.length) throw Error("Exact approved beta identities required");
-		this.accounts = structuredClone(n), this.accountDigests = [...r], this.deadline = i, this.factory = e, this.client = e(this), this.phase = "password", this.stage = "idle";
+	constructor(e, { enabled: t = !1, accounts: n = [], accountDigests: r = [], resumeFactorDigests: i = [], expiresAt: a = 0 } = {}, o = () => {}, s = Date.now) {
+		if (this.now = s, this.displayTotp = o, this.phase = "closed", this.stage = "closed", this.busy = !1, this.abort = new AbortController(), this.calls = /* @__PURE__ */ new Map(), !t) return;
+		let c = n.length + r.length;
+		if (!Number.isSafeInteger(a) || a <= s() || a > s() + 864e5 || c < 1 || c > 2 || n.some((e) => !X(e.id) || !/^\S+@\S+\.\S+$/.test(e.email)) || r.some((e) => !/^\w{64}$/.test(e) || !/^[0-9a-f]+$/.test(e)) || new Set(r).size !== r.length || new Set(n.map((e) => e.id)).size !== n.length || new Set(n.map((e) => e.email)).size !== n.length) throw Error("Exact approved beta identities required");
+		if (i.length > 2 || i.some((e) => !/^[0-9a-f]{64}$/.test(e))) throw Error("Exact recovery factor required");
+		this.accounts = structuredClone(n), this.accountDigests = [...r], this.resumeFactorDigests = [...i], this.deadline = a, this.factory = e, this.client = e(this), this.phase = "password", this.stage = "idle";
 	}
 	status() {
 		return {
 			phase: this.phase,
 			busy: this.busy,
+			resuming: this.resuming === !0,
 			receipt: this.receipt ? structuredClone(this.receipt) : null
 		};
 	}
@@ -8136,9 +8138,13 @@ var ma = "https://xqczjqonivguoeltskon.supabase.co", X = (e) => typeof e == "str
 				let e = Z(await this.client.auth.signInWithPassword({
 					email: this.account.email,
 					password: t.password
-				}));
-				if (Q(await this.identityFor(e.session, "password", "aal1")).length || _a(Z(await this.client.auth.passkey.list())).length) throw Error("Fresh identity required");
-				this.phase = "enroll";
+				})), n = await this.identityFor(e.session, "password", "aal1");
+				if (_a(Z(await this.client.auth.passkey.list())).length) throw Error("Fresh identity required");
+				let r = Q(n);
+				if (r.length) {
+					if (r.length !== 1 || r[0].type !== "totp" || r[0].status !== "unverified" || !X(r[0].id) || !this.resumeFactorDigests.includes(await ga(this.account.id + ":" + r[0].id))) throw Error("Exact recovery factor required");
+					this.factor = r[0].id, this.resuming = !0, this.phase = "verify";
+				} else this.phase = "enroll";
 			} else if (e === "enroll") {
 				let e = Z(await this.client.auth.getUser()).user;
 				if (e.id !== this.account.id || Q(e).length || _a(Z(await this.client.auth.passkey.list())).length) throw Error();
@@ -8255,7 +8261,8 @@ function ya(e, t) {
 var ba = Object.freeze({
 	enabled: !0,
 	accountDigests: ["16eb086c854bc079e9ee8169697389b7d5be09f6960b72334845409676b4b2d3", "aeb0a946a60fd4baba756f656642541acd6ff8b2a7637e49901559d8f74c2de9"],
-	expiresAt: 1793986695245
+	expiresAt: 1793986695245,
+	resumeFactorDigests: ["be75fd4d9176708110a6714285a1be722287209a203bcc3128ee37a19c525229"]
 }), xa = "sb_publishable_RKuf517e3CSdi7z2EBRgzw_c0iqHymC", $ = (e) => document.getElementById(e), Sa = {
 	closed: "Test account setup is not enabled yet.",
 	password: "Sign in with the approved test account password.",
@@ -8280,7 +8287,7 @@ var ba = Object.freeze({
 });
 function wa() {
 	let e = Ca.status();
-	$("status").textContent = Sa[e.phase];
+	$("status").textContent = e.resuming && e.phase === "verify" ? "Use the authenticator entry you already saved for this test account. Enter its current six-digit code. No new entry is being created." : Sa[e.phase];
 	for (let t of [
 		"password",
 		"enroll",
