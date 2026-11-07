@@ -17718,35 +17718,40 @@ function so(e) {
 		}
 	};
 }
-function co(e, t = Date.now) {
-	let n = () => {
-		if (t() >= 1793986695245) throw Error("Test window closed");
-	}, r = async () => {
-		n();
-		let t = await e.inspect();
-		if (t.account !== "ddb38ff2-b838-4b0a-af6a-bf45a9a7dbdb" || t.factors.length !== 1 || t.factors[0].id !== "a1d273ec-efbc-405d-964f-405f9d9f4471" || t.factors[0].status !== "verified" || t.factors[0].type !== "totp" || t.passkeys.length !== 1 || t.passkeys[0] !== "85da618a-4701-4e6e-bbb6-83b4d3c58371") throw Error("Test identity changed");
-		return t;
+//#endregion
+//#region next-stage-preparation/beta-b-setup-nov7/handler.ts
+function co(e, t) {
+	return !!e && Number.isSafeInteger(e.startsAt) && Number.isSafeInteger(e.endsAt) && e.endsAt - e.startsAt === 72e5 && t >= e.startsAt && t < e.endsAt;
+}
+function lo(e, t = Date.now, n = null) {
+	let r = () => {
+		if (!co(n, t())) throw Error("Test window closed");
 	}, i = async () => {
+		r();
+		let t = await e.inspect();
+		if (r(), t.account !== "ddb38ff2-b838-4b0a-af6a-bf45a9a7dbdb" || t.factors.length !== 1 || t.factors[0].id !== "a1d273ec-efbc-405d-964f-405f9d9f4471" || t.factors[0].status !== "verified" || t.factors[0].type !== "totp" || t.passkeys.length !== 1 || t.passkeys[0] !== "85da618a-4701-4e6e-bbb6-83b4d3c58371") throw Error("Test identity changed");
+		return t;
+	}, a = async () => {
 		throw Error("This test preserves existing sign-in methods");
 	};
 	return {
 		async sendCode(t) {
-			if (n(), [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map((e) => e.toString(16).padStart(2, "0")).join("") !== "67a70800a0f7b89b288b4c35c6f435d7465a98e516475ff405c68ce680308e48") throw Error("Use the approved test email");
+			if (r(), [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map((e) => e.toString(16).padStart(2, "0")).join("") !== "67a70800a0f7b89b288b4c35c6f435d7465a98e516475ff405c68ce680308e48") throw Error("Use the approved test email");
 			await e.sendCode(t);
 		},
-		async verifyEmail(t, i) {
-			n(), await e.verifyEmail(t, i), await r();
+		async verifyEmail(t, n) {
+			r(), await e.verifyEmail(t, n), await i();
 		},
-		inspect: r,
-		enrollAuthenticator: i,
-		removeUnverified: i,
-		createPasskey: i,
+		inspect: i,
+		enrollAuthenticator: a,
+		removeUnverified: a,
+		createPasskey: a,
 		async verifyAuthenticator(t, n) {
-			if (await r(), t !== "a1d273ec-efbc-405d-964f-405f9d9f4471") throw Error();
-			await e.verifyAuthenticator(t, n), await r();
+			if (await i(), t !== "a1d273ec-efbc-405d-964f-405f9d9f4471") throw Error();
+			await e.verifyAuthenticator(t, n), await i();
 		},
 		async finish() {
-			await r();
+			await i();
 			let t = await e.finish();
 			if (t.account !== "ddb38ff2-b838-4b0a-af6a-bf45a9a7dbdb" || t.epoch !== 1) throw Error();
 			return t;
@@ -17756,46 +17761,72 @@ function co(e, t = Date.now) {
 }
 //#endregion
 //#region beta-onboarding/app.tsx
-var lo = "https://xqczjqonivguoeltskon.supabase.co", uo = "/functions/v1/wt-beta-health-v1/enrollment/complete", fo = co(so({
-	publishableKey: "sb_publishable_RKuf517e3CSdi7z2EBRgzw_c0iqHymC",
-	functionPath: uo,
-	allowAccountCreation: !1,
-	fetcher: async (e, t) => {
-		let n = new URL(typeof e == "string" ? e : e instanceof URL ? e.href : e.url), r = t?.method ?? "GET", i = r === "POST" && n.pathname === "/auth/v1/logout" && n.search === "?scope=local", a = r === "GET" && [
-			"/auth/v1/user",
-			"/auth/v1/.well-known/jwks.json",
-			"/auth/v1/passkeys"
-		].includes(n.pathname), o = r === "POST" && [
-			"/auth/v1/otp",
-			"/auth/v1/verify",
-			"/auth/v1/factors/a1d273ec-efbc-405d-964f-405f9d9f4471/challenge",
-			"/auth/v1/factors/a1d273ec-efbc-405d-964f-405f9d9f4471/verify",
-			uo
-		].includes(n.pathname);
-		if (location.origin !== "https://itswaisttime.com" || n.origin !== lo || n.hash || n.username || n.password || !i && (n.search || Date.now() >= 1793986695245) || !i && !a && !o) throw Error("Test route unavailable");
-		return fetch(e, t);
-	},
-	config: {
-		enabled: !0,
-		providerVerified: !0,
-		rpAssociationVerified: !0,
-		rpId: "itswaisttime.com",
-		allowedOrigins: ["https://itswaisttime.com"]
-	},
-	bridge: {
-		supported: () => !1,
-		register: async () => {
-			throw Error("Existing passkey only");
+var uo = null, fo = "https://xqczjqonivguoeltskon.supabase.co", po = "/functions/v1/wt-beta-setup-v1/enrollment/complete", mo = async (e, t) => {
+	let n = new URL(typeof e == "string" ? e : e instanceof URL ? e.href : e.url), r = t?.method ?? "GET", i = r === "POST" && n.pathname === "/auth/v1/logout" && n.search === "?scope=local", a = r === "GET" && [
+		"/auth/v1/user",
+		"/auth/v1/.well-known/jwks.json",
+		"/auth/v1/passkeys"
+	].includes(n.pathname), o = r === "POST" && [
+		"/auth/v1/otp",
+		"/auth/v1/verify",
+		"/auth/v1/factors/a1d273ec-efbc-405d-964f-405f9d9f4471/challenge",
+		"/auth/v1/factors/a1d273ec-efbc-405d-964f-405f9d9f4471/verify",
+		po
+	].includes(n.pathname);
+	if (location.origin !== "https://itswaisttime.com" || n.origin !== fo || n.hash || n.username || n.password || !i && (n.search || !co(uo, Date.now())) || !i && !a && !o) throw Error("Test route unavailable");
+	return fetch(e, t);
+};
+function ho() {
+	let e = lo(so({
+		publishableKey: "sb_publishable_RKuf517e3CSdi7z2EBRgzw_c0iqHymC",
+		functionPath: po,
+		allowAccountCreation: !1,
+		fetcher: mo,
+		config: {
+			enabled: !0,
+			providerVerified: !0,
+			rpAssociationVerified: !0,
+			rpId: "itswaisttime.com",
+			allowedOrigins: ["https://itswaisttime.com"]
 		},
-		cancel: async () => {}
+		bridge: {
+			supported: () => !1,
+			register: async () => {
+				throw Error("Existing passkey only");
+			},
+			cancel: async () => {}
+		}
+	}), Date.now, uo);
+	function t() {
+		let [t, n] = (0, _.useState)(!1);
+		return /* @__PURE__ */ (0, x.jsxs)(x.Fragment, { children: [/* @__PURE__ */ (0, x.jsxs)("header", { children: [/* @__PURE__ */ (0, x.jsx)("p", { children: "Waist Time · Isolated setup check" }), /* @__PURE__ */ (0, x.jsx)("p", { children: "Use the approved beta-b email and its saved authenticator. Your existing passkey is kept. No health records are opened by this check." })] }), t ? /* @__PURE__ */ (0, x.jsxs)("main", { children: [/* @__PURE__ */ (0, x.jsx)("h1", { children: "Setup check closed" }), /* @__PURE__ */ (0, x.jsx)("p", { children: "Tell Anya the last message you saw. Keep passwords and verification codes private." })] }) : /* @__PURE__ */ (0, x.jsx)(te, {
+			port: e,
+			onClose: () => n(!0)
+		})] });
 	}
-}));
-function po() {
-	let [e, t] = (0, _.useState)(!1);
-	return /* @__PURE__ */ (0, x.jsxs)(x.Fragment, { children: [/* @__PURE__ */ (0, x.jsxs)("header", { children: [/* @__PURE__ */ (0, x.jsx)("p", { children: "Waist Time · Isolated setup check" }), /* @__PURE__ */ (0, x.jsx)("p", { children: "Use the approved beta-b email and its saved authenticator. Your existing passkey is kept. No health records are opened by this check." })] }), e ? /* @__PURE__ */ (0, x.jsxs)("main", { children: [/* @__PURE__ */ (0, x.jsx)("h1", { children: "Setup check closed" }), /* @__PURE__ */ (0, x.jsx)("p", { children: "Tell Anya the last message you saw. Keep passwords and verification codes private." })] }) : /* @__PURE__ */ (0, x.jsx)(te, {
-		port: fo,
-		onClose: () => t(!0)
-	})] });
+	(0, v.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, x.jsx)(t, {}));
 }
-(0, v.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, x.jsx)(po, {}));
+async function go() {
+	let e = document.getElementById("root");
+	e.textContent = "Checking setup availability…";
+	try {
+		if (location.origin !== "https://itswaisttime.com") throw Error();
+		let e = await fetch(fo + "/functions/v1/wt-beta-setup-v1/status", {
+			credentials: "omit",
+			cache: "no-store",
+			redirect: "error",
+			signal: AbortSignal.timeout(1e4)
+		});
+		if (!e.ok) throw Error();
+		let t = await e.json();
+		if (!co(t, Date.now())) throw Error();
+		uo = Object.freeze({
+			startsAt: t.startsAt,
+			endsAt: t.endsAt
+		}), ho();
+	} catch {
+		e.textContent = "The setup check is closed. Anya will let you know when it is ready.";
+	}
+}
+go();
 //#endregion
