@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://xqczjqonivguoeltskon.supabase.co; base-uri 'none'; form-action 'none'">
+<title>Waist Time — Personal passkey</title><link rel="stylesheet" href="style.css">
+<main><h1>Add your Waist Time passkey</h1><p>This adds one passkey to your existing account. This page does not change your records or photos.</p>
+<p id="status" role="status">Enter your existing Waist Time email to begin. Save only one passkey.</p>
+<form id="email-form"><label>Email <input id="email" type="email" autocomplete="email" required></label><button disabled>Send a new code</button></form>
+<form id="code-form"><label>Email code <input id="code" autocomplete="one-time-code" required></label><button disabled>Confirm existing account</button></form>
+<button id="enroll" disabled>Save one passkey</button><button id="inspect" disabled>Check enrollment status</button><button id="close" disabled>Close this enrollment session</button>
+<p>If email sign-in is interrupted, request a new code. If saving a passkey is interrupted, check its status before trying setup again. Your existing app remains available.</p></main><script type="module" src="surface.mjs"></script></html>
